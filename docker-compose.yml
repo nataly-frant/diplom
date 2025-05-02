@@ -17,6 +17,8 @@ services:
       - ./backend/migrations:/code/migrations
     env_file:
       - .env
+    environment:
+      - PYTHONPATH=/code
 
   frontend:
     build:
