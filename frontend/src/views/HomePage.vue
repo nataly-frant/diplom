@@ -2,7 +2,11 @@
   <v-container fluid>
 
     <!-- Заголовок текущей смены -->
-    <h1 class="page-title">Текущая смена: С</h1>
+    <h1 class="page-title">Текущая смена:
+      <v-chip class="pl-6 pr-6" color="green" variant="flat" size="x-large">
+        <h2>C</h2>
+      </v-chip>
+    </h1>
 
     <v-row no-gutters align="stretch" justify="space-between">
       <!-- Статус производственных линий -->
