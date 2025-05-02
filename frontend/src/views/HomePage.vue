@@ -11,14 +11,14 @@
     <v-row no-gutters align="stretch" justify="space-between">
       <!-- Статус производственных линий -->
       <v-col>
-        <v-card class="pa-2 ma-2" min-height="220">
+        <v-card class="pa-2 ma-2" min-height="230">
           <h3>Статус производственных линий</h3>
           <ProductionLinesStatus/>
         </v-card>
       </v-col>
       <!-- Текущая продукция в производстве -->
       <v-col>
-        <v-card class="pa-2 ma-2" min-height="220">
+        <v-card class="pa-2 ma-2" min-height="230">
           <h3>Текущая продукция в производстве</h3>
           <CurrentProducts/>
         </v-card>

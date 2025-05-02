@@ -4,10 +4,13 @@
       <v-list-item v-for="(line, index) in lines" :key="index">
         <v-list-item-content>
           <v-list-item-title>
-            {{ line.name }} — {{ line.product }}
+            <div class="d-flex justify-space-between align-center">
+              <span>{{ line.name }} — {{ line.product }}</span>
+              <span><v-chip :color="statusColor(line.status)" dark>{{ line.status }}</v-chip></span>
+            </div>
           </v-list-item-title>
           <v-list-item-subtitle>
-            Статус: <v-chip :color="statusColor(line.status)" dark>{{ line.status }}</v-chip> | Выполнение: {{ line.progress }}%
+            Выполнение плана: {{ line.progress }}%
           </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
@@ -17,18 +20,19 @@
 
 <script setup>
 const lines = [
-  { name: 'Линия 1', product: 'Черный чай', status: 'В работе', progress: 67 },
-  { name: 'Линия 2', product: 'Зеленый чай', status: 'Остановлена', progress: 20 }
+  {name: 'Линия 1', product: 'Черный чай', status: 'В работе', progress: 70},
+  {name: 'Линия 2', product: 'Зеленый чай', status: 'Остановлена', progress: 49},
+  {name: 'Линия 3', product: 'Травяной чай', status: 'В работе', progress: 90}
 ]
 
 function statusColor(status) {
   switch (status) {
     case 'В работе':
-      return 'blue'
+      return 'green'
     case 'Остановлена':
       return 'red'
     case 'Завершена':
-      return 'green'
+      return 'blue'
     default:
       return 'grey'
   }
