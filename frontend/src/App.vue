@@ -7,13 +7,15 @@
     <template v-else>
       <!-- Полная оболочка для авторизованной части -->
       <v-app>
+        <!-- Верхняя панель -->
         <v-app-bar app color="primary" dark>
-          <v-app-bar-title>Справочная система ООО "Юнилевер Русь"
-          </v-app-bar-title>
+          <!-- Бургер на мобильных -->
+          <v-app-bar-nav-icon v-show="isMobile" @click="drawer = !drawer" />
 
+          <v-app-bar-title>Справочная система ООО "Юнилевер Русь"</v-app-bar-title>
           <v-spacer/>
 
-          <!-- Кнопка "Users" (видна только админу) -->
+          <!-- Кнопка "Users" (только для админа) -->
           <template v-if="isAdmin">
             <v-btn icon @click="goToUsers" title="Пользователи">
               <v-icon>mdi-account-group</v-icon>
@@ -25,8 +27,13 @@
           </v-btn>
         </v-app-bar>
 
-        <v-navigation-drawer app permanent>
-
+        <!-- Боковое меню -->
+        <v-navigation-drawer
+          app
+          v-model="drawer"
+          :permanent="!isMobile"
+          temporary
+        >
           <v-list dense class="d-flex flex-column fill-height">
 
             <!-- Главная -->
@@ -54,6 +61,7 @@
                 :key="index"
                 :to="item.to"
                 link
+                @click="handleNavClick"
               >
                 <v-list-item-title>{{ item.title }}</v-list-item-title>
               </v-list-item>
@@ -66,6 +74,7 @@
               :key="index"
               :to="item.to"
               link
+              @click="handleNavClick"
             >
               <v-list-item-title>{{ item.title }}</v-list-item-title>
             </v-list-item>
@@ -91,17 +100,29 @@
 </template>
 
 <script setup>
-import {ref, computed} from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import {useRoute, useRouter} from 'vue-router'
 
 const route = useRoute()
 const router = useRouter()
 
-// Определяем на какой странице мы находимся
 const isLoginPage = computed(() => route.path === '/login')
+const isAdmin = ref(true)
 
-// Флаг, показывающий, админ ли пользователь
-const isAdmin = ref(true) // Здесь поставь логику проверки реального пользователя
+const drawer = ref(true)
+const isMobile = ref(false)
+
+function updateMobileStatus() {
+  isMobile.value = window.innerWidth < 1200
+  if (isMobile.value) drawer.value = false
+}
+onMounted(() => {
+  updateMobileStatus()
+  window.addEventListener('resize', updateMobileStatus)
+})
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', updateMobileStatus)
+})
 
 const infoItems = [
   {title: "Производственные линии", to: "/info-cards/production-lines"},
@@ -121,15 +142,18 @@ const menuItems = [
 ]
 
 function logout() {
-  // Здесь можешь добавить реальную логику выхода
   console.log('Выход из системы')
-  // Например: очистка токенов, редирект на страницу входа и т.д.
   router.push('/login')
 }
 
 function goToUsers() {
   console.log('Переход на страницу пользователей')
-  router.push('/users') // Переход на страницу /users
+  router.push('/users')
+}
+
+// Автоматически закрываем меню на мобильном при переходе
+function handleNavClick() {
+  if (isMobile.value) drawer.value = false
 }
 </script>
 
